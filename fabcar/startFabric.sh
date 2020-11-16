@@ -39,3 +39,5 @@ pushd ../test-network
 ./network.sh up createChannel -ca -s couchdb
 ./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl ${CC_SRC_LANGUAGE} -ccp ${CC_SRC_PATH}
 popd
+
+# ./network.sh deployCC -ccn fabcar -ccv 1 -cci initLedger -ccl javascript -ccp ../chaincode/fabcar/javascript/
