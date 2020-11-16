@@ -1,12 +1,17 @@
 /*
-* contract
-* */
+ * Copyright IBM Corp. All Rights Reserved.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-const Contract = require("fabric-contract-api");
+'use strict';
 
-class FabCar extends Contract{
+const { Contract } = require('fabric-contract-api');
+
+class FabCar extends Contract {
+
     async initLedger(ctx) {
-        console.log("===================== START: Initialize Ledger====================")
+        console.info('============= START : Initialize Ledger ===========');
         const cars = [
             {
                 color: 'blue',
@@ -70,23 +75,22 @@ class FabCar extends Contract{
             },
         ];
 
-        for(let i=0; i< cars.length; i++){
-            cars[i].docType ='car';
-            await ctx.stub.putState('CAR'+i,Buffer.from(JSON.stringify(cars[i])))
-            console.log('Added <------>',cars[i]);
+        for (let i = 0; i < cars.length; i++) {
+            cars[i].docType = 'car';
+            await ctx.stub.putState('CAR' + i, Buffer.from(JSON.stringify(cars[i])));
+            console.info('Added <--> ', cars[i]);
         }
         console.info('============= END : Initialize Ledger ===========');
     }
 
-    async queryCar(ctx,carNumber){
-        const carAsBytes = await ctx.stub.getState(carNumber);
-        if(! carAsBytes || carAsBytes.length ==0){
-            throw new Error(`${carNumber} does not eists`);
+    async queryCar(ctx, carNumber) {
+        const carAsBytes = await ctx.stub.getState(carNumber); // get the car from chaincode state
+        if (!carAsBytes || carAsBytes.length === 0) {
+            throw new Error(`${carNumber} does not exist`);
         }
         console.log(carAsBytes.toString());
         return carAsBytes.toString();
     }
-
 
     async createCar(ctx, carNumber, make, model, color, owner) {
         console.info('============= START : Create Car ===========');
@@ -135,6 +139,7 @@ class FabCar extends Contract{
         await ctx.stub.putState(carNumber, Buffer.from(JSON.stringify(car)));
         console.info('============= END : changeCarOwner ===========');
     }
+
 }
 
 module.exports = FabCar;
